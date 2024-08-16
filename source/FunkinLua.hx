@@ -2823,47 +2823,40 @@ class FunkinLua {
 
 		#if android
 		//static var spicyPillow:AndroidBatteryManager = new AndroidBatteryManager();
-
 		//Lua_helper.add_callback(lua, "isRooted", AndroidTools.isRooted());
 		Lua_helper.add_callback(lua, "isDolbyAtmos", AndroidTools.isDolbyAtmos());
 		Lua_helper.add_callback(lua, "isAndroidTV", AndroidTools.isAndroidTV());
 		Lua_helper.add_callback(lua, "isTablet", AndroidTools.isTablet());
 		Lua_helper.add_callback(lua, "isChromebook", AndroidTools.isChromebook());
 		Lua_helper.add_callback(lua, "isDeXMode", AndroidTools.isDeXMode());
-		//Lua_helper.add_callback(lua, "isCharging", spicyPillow.isCharging());
-
 		Lua_helper.add_callback(lua, "backJustPressed", FlxG.android.justPressed.BACK);
 		Lua_helper.add_callback(lua, "backPressed", FlxG.android.pressed.BACK);
 		Lua_helper.add_callback(lua, "backJustReleased", FlxG.android.justReleased.BACK);
-
 		Lua_helper.add_callback(lua, "menuJustPressed", FlxG.android.justPressed.MENU);
 		Lua_helper.add_callback(lua, "menuPressed", FlxG.android.pressed.MENU);
 		Lua_helper.add_callback(lua, "menuJustReleased", FlxG.android.justReleased.MENU);
-
 		Lua_helper.add_callback(lua, "getCurrentOrientation", () -> PsychJNI.getCurrentOrientationAsString());
-		Lua_helper.add_callback(lua, "setOrientation", function(hint:Null<String>):Void
+		Lua_helper.add_callback(lua, "setOrientation", function(orientation:Null<String>):Void
 		{
-			switch (hint.toLowerCase())
+			switch (orientation.toLowerCase())
 			{
 				case 'portrait':
-					hint = 'Portrait';
+					orientation = 'Portrait';
 				case 'portraitupsidedown' | 'upsidedownportrait' | 'upsidedown':
-					hint = 'PortraitUpsideDown';
+					orientation = 'PortraitUpsideDown';
 				case 'landscapeleft' | 'leftlandscape':
-					hint = 'LandscapeLeft';
+					orientation = 'LandscapeLeft';
 				case 'landscaperight' | 'rightlandscape' | 'landscape':
-					hint = 'LandscapeRight';
+					orientation = 'LandscapeRight';
 				default:
-					hint = null;
+					orientation = null;
 			}
-			if (hint == null)
+			if (orientation == null)
 				return luaTrace('setOrientation: No orientation specified.');
-			PsychJNI.setOrientation(FlxG.stage.stageWidth, FlxG.stage.stageHeight, false, hint);
+			PsychJNI.setOrientation(FlxG.stage.stageWidth, FlxG.stage.stageHeight, false, orientation);
 		});
-
 		Lua_helper.add_callback(lua, "minimizeWindow", () -> AndroidTools.minimizeWindow());
-
-		Lua_helper.add_callback(lua, "showToast", function(text:String, duration:Null<Int>, ?xOffset:Null<Int>, ?yOffset:Null<Int>) //, ?gravity:Null<Int>
+		Lua_helper.add_callback(lua, "showToast", function(text:String, duration:Null<Int>, ?xOffset:Null<Int>, ?yOffset:Null<Int>)
 		{
 			if (text == null)
 				return luaTrace('showToast: No text specified.');
@@ -2877,24 +2870,7 @@ class FunkinLua {
 
 			AndroidToast.makeText(text, duration, -1, xOffset, yOffset);
 		});
-
-		Lua_helper.add_callback(lua, "isScreenKeyboardShown", () -> PsychJNI.isScreenKeyboardShown());
-
-		Lua_helper.add_callback(lua, "clipboardHasText", () -> PsychJNI.clipboardHasText());
-		Lua_helper.add_callback(lua, "clipboardGetText", () -> PsychJNI.clipboardGetText());
-		Lua_helper.add_callback(lua, "clipboardSetText", function(text:Null<String>):Void
-		{
-			if (text != null) return luaTrace('clipboardSetText: No text specified.');
-			PsychJNI.clipboardSetText(text);
-		});
-
-		Lua_helper.add_callback(lua, "manualBackButton", () -> PsychJNI.manualBackButton());
-
-		Lua_helper.add_callback(lua, "setActivityTitle", function(text:Null<String>):Void
-		{
-			if (text != null) return luaTrace('setActivityTitle: No text specified.');
-			PsychJNI.setActivityTitle(text);
-		});
+		//Lua_helper.add_callback(lua, "isCharging", spicyPillow.isCharging());
 		#end
 
 		call('onCreate', []);
